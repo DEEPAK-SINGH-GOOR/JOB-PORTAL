@@ -1,5 +1,14 @@
 const Jobportalsupport = require("../model/jobportalsupport.scema")
-
+const multer = require("multer")
+const storage = multer.diskStorage({
+    destination : function(cb,req,file){
+            return cb(null,"uploads"); // check this code
+    },
+    filename : function(cb,req,file){
+            return cb(null,`${Date.now()}-${file.orignalName()}`); // check this
+    }
+})
+const upload = multer({storage : storage});
 const allusres = async (req,res) => {
    
     try {
@@ -12,8 +21,15 @@ const allusres = async (req,res) => {
     
 }
 
-const createUser = async (req,res) => {
-    // work in progressive ....
+const createuser = async (req,res) => {
+ try {
+      let newuser = await Jobportalsupport.create(req.body);
+      if(!newuser || newuser == {}) return res.status(400).send({"message":"user created time occured error !"});
+      return res.status(200).send({"message":"user created Sucessfully."});
+    } catch (error) {
+     return res.status(500).send({"message":"User Created Time Server Error Occured.",error});
+ }
+
 }
 
-module.exports = { allusres , createUser }
+module.exports = { allusres , createuser , upload }
