@@ -1,0 +1,53 @@
+param Task :
+----------------------------------------------
+jobSchema Collection :
+-----------------------------------------------
+- job_title : String
+- job_description : String
+- requirements : String Of Array
+- salary_range : String
+- location : String
+- status : String (open, closed)
+- posting_date : DateTime
+--------------------------------------------------
+Jobportalschema Collection :
+------------------------------------------------
+- Username : String
+- **Email : String**
+- **Password : String**
+- First Name **: String**
+- Last Name **: String**
+- **Role : String | ENUM[ admin ,** Employer **]**
+- Profile Picture **: String**
+- Phone Number **: String**
+- **Permissions : Array**
+- Last Login **: DateTime**
+- Account Created Date **: DateTime**
+- **Status : String | Default→Inactive | ENUM[ active , Inactive ]**
+- Audit Logs **: Array of Objects  // after Create Audit Collection**
+- **Tokens : Array**
+- **OTPs : Array**
+- IP_address : **Array**
+-------------------------------------------------------
+
+
+deepak Task : 
+------------------------------
+=> companySchema Collection :
+---------------------------------
+- **Name : String**
+- **Email : String**
+- Phone Number **: String**
+- Website **: String**
+- Industry : **String like  IT, healthcare, finance….**
+- Recruiter ID : Populating So ObjectId/ref
+- Job Postings **: String**
+- active_status :  **String | Default→Inactive | ENUM[ active , Inactive ]**
+---------------------------------------------------------------------------
+auditSchema Collection : 
+-------------------------------------------------------------------------------
+- **user_id** : Populating So ObjectId/ref  | [ ****Job Seeker , Recruiter **,** Employer ****]
+- action_type : String  | like Account Modification (update , delete ,create) , Job Posts Modification      ( update , delete ,create )
+- action_description : String  |  like that user is delete(Modify) this post , emplyees this User Blockd😅 etc…
+- status : String |  **ENUM[ Success , Failure ]**
+---------------------------------------------------------------------------------------------------------------------
