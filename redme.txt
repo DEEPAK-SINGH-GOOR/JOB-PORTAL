@@ -30,6 +30,12 @@ Jobportalschema Collection :
 - IP_address : **Array**
 -------------------------------------------------------
 
+-------------------------------
+param : date -> 27-12-24
+------------------------------
+=> Create One Login and SignUp page and create request check backend process like ( createNewUser , LoginUser ) and Remaining time in use show the message in frontend age like ( 'User Alredy is Exist !' )
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 deepak Task : 
 ------------------------------
