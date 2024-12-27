@@ -33,7 +33,7 @@ Jobportalschema Collection :
 -------------------------------
 param : date -> 27-12-24
 ------------------------------
-=> Create One Login and SignUp page and create request check backend process like ( createNewUser , LoginUser ) and Remaining time in use show the message in frontend age like ( 'User Alredy is Exist !' )
+=> Create One Login and SignUp page and create request check backend process like ( createNewUser , LoginUser ) and Remaining time in use show the message in frontend age like ( 'User Alredy is Exist !' ) 'Attractive' 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -68,4 +68,10 @@ deepak : date -> 27-12-24
 1). use postman
 2). check this routes is work properly or not then contact me
 3). last two Routes check in Browser
+
+create Routes : 
+get /allUsers
+get /users/:id
+update /users/:id
+delete /users/:id
 --------------------------------------------------------------
