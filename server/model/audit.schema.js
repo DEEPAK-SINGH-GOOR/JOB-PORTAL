@@ -4,7 +4,10 @@ const auditschema = new mongoose.Schema({
   userid: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Jobportalsupport',
-    required: true
+  },
+  emplyeeid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'jobportal',
   },
   actiontype: {
     type: String,

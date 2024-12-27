@@ -1,4 +1,7 @@
-const mongoose = require('mongoose');
+require('dotenv').config();
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const Jobportalsupportschema = new mongoose.Schema(
   {
@@ -16,8 +19,8 @@ const Jobportalsupportschema = new mongoose.Schema(
         validator: function (v) {
           return /\S+@\S+\.\S+/.test(v);
         },
-        message: 'The email address is not valid!'
-      }
+        message: "The email address is not valid!",
+      },
     },
     password: {
       type: String,
@@ -25,45 +28,47 @@ const Jobportalsupportschema = new mongoose.Schema(
       required: true,
       validate: {
         validator: function (v) {
-          return v.match(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z0-9!@#$%^&*(),.?":{}|<>]{6,}$/);
+          return v.match(
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z0-9!@#$%^&*(),.?":{}|<>]{6,}$/
+          );
         },
-        message: 'Password must be at least 6 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.',
-      }
+        message:
+          "Password must be at least 6 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.",
+      },
     },
     firstName: {
       type: String,
-      required: true
+      required: true,
     },
     lastName: {
       type: String,
-      required: true
+      required: true,
     },
     role: {
       type: String,
-      enum: ['jobseeker', 'recruiter'],
-      default: 'jobseeker'
+      enum: ["jobseeker", "recruiter"],
+      default: "jobseeker",
     },
     profilePicture: {
       type: String,
-      required : true
+      default: "",
     },
     phoneNumber: {
       type: String,
-      required: true,
       validate: {
         validator: function (v) {
           return /^[0-9]{10}$/.test(v);
         },
-        message: `is not a valid phone number!`
-      }
+        message: `is not a valid phone number!`,
+      },
     },
     permissions: {
       type: [String],
-      default: []
+      default: [],
     },
     lastLogin: {
       type: Date,
-      default: null
+      default: null,
     },
     accountCreatedDate: {
       type: Date,
@@ -71,18 +76,17 @@ const Jobportalsupportschema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['active', 'inactive'],
-      default: 'inactive',
+      enum: ["active", "inactive"],
+      default: "inactive",
     },
     tokens: [
       {
-        type: String,
-        required : true
+        type: String
       },
     ],
     otps: [
       {
-        type: String, 
+        type: String,
       },
     ],
     ip_address: [
@@ -92,16 +96,44 @@ const Jobportalsupportschema = new mongoose.Schema(
     ],
     company_details: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'company',
-      required : true
+      ref: "company",
     },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
+Jobportalsupportschema.pre("save",async function(next){
+  try {
+      if(this.isModified("password")){
+        this.password = await bcrypt.hash(this.password, 10); 
+      }
+      next();
+  } catch (error) {
+    console.log("pass Error : ",error)
+    next(error);
+  }
+});
 
-const Jobportalsupport = mongoose.model('Jobportalsupport', Jobportalsupportschema);
+Jobportalsupportschema.methods.genauthToken = async function () {
+  try {
+    const token = jwt.sign(
+      { id: this._id.toString(), role: this.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    await this.tokens.push(token)
+    await this.save();
+    return token;
+  } catch (error) {
+    console.log("ERR : ",error);
+  }
+};
+
+const Jobportalsupport = mongoose.model(
+  "Jobportalsupport",
+  Jobportalsupportschema
+);
 
 module.exports = Jobportalsupport;

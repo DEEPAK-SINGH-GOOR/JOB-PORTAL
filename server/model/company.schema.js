@@ -34,10 +34,10 @@ const companyschema = new mongoose.Schema({
         ref: 'Jobportalsupport',
         required: true
     },
-    jobpostings: {
+    jobpostings: [{
         type: String,
         required: true
-    },
+    }],
     activestatus: {
         type: String,
         enum: ['active', 'inactive'],

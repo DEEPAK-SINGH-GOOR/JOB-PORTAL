@@ -1,0 +1,23 @@
+<!-- testing Purpose -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <button id="test">Test</button>
+
+    <script>
+        function test(){
+            let url = "http://localhost:8090/auth/google";
+            window.location.href = url; 
+            
+        }
+        document.getElementById('test').addEventListener('click', test);
+    </script>
+</body>
+</html>
