@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Jobportalsupport = require("../model/jobportalsupport.scema")
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
@@ -17,7 +18,7 @@ const transport = nodemailer.createTransport({
     service : "gmail",
     auth : {
         user : "chauhanvivek0918@gmail.com",
-        pass : "ulnm lkmy lslp eoyi"
+        pass : process.env.GMAIL_VERIFIED
     }
 })
 
