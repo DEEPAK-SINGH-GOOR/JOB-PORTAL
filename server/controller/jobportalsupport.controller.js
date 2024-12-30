@@ -1,5 +1,6 @@
 const Jobportalsupport = require("../model/jobportalsupport.scema")
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
 const multer = require("multer")
 const storage = multer.diskStorage({
     destination : function(req,file,cb){
@@ -10,6 +11,17 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({storage : storage});
+
+//email verification
+const transport = nodemailer.createTransport({
+    service : "gmail",
+    auth : {
+        user : "chauhanvivek0918@gmail.com",
+        pass : "ulnm lkmy lslp eoyi"
+    }
+})
+
+
 const allusres = async (req,res) => {
    
     try {
@@ -26,14 +38,47 @@ const createuser = async (req,res) => {
  try {
       req.body.profilePicture = await req.file.path
       let newuser = await Jobportalsupport.create(req.body);
-      
-      let token = await newuser.genauthToken();
-      if(!newuser || newuser == {}) return res.status(400).send({"message":"user created time occured error !"});
+
+        const option = await {
+          from : "chauhanvivek0918@gmail.com",
+          to : newuser.email,
+          subject : "Email Verify Mail",
+          html : `<a href=http://localhost:8090/verifiedAccount/${newuser?._id?.toString()}>Verified Your Account</a>`
+      }
+    
+
+      const sendmail = await transport.sendMail(option,(err,data)=>{
+       try {
+          if(err) return console.log(err);
+        //   console.log(data);
+       } catch (error) {
+          console.log(error);
+       }
+      })
+        
+        let token = await newuser.genauthToken();
+        if(!newuser || newuser == {}) return res.status(400).send({"message":"user created time occured error !"});
+       
+
       return res.status(200).send({"message":"user created Sucessfully.",newuser,token});
     } catch (error) {
      return res.status(500).send({"message":"User Created Time Server Error Occured.",error});
  }
 
+}
+
+const verifyemail = async (req,res) => {
+    let { id } = req.params
+    console.log(id);
+
+    if(!id || id==null || id==undefined){
+        return res.status(400).send({message : "Source Not Founded Of Email Verify Time !"})
+    }
+    
+    let userUpdate = await Jobportalsupport.findByIdAndUpdate({_id : id},{status : "active"},{new:true});
+    console.log(userUpdate);
+    
+    return res.status(200).send({message : "Email Verify Successfully!",userUpdate}) // create one page of Email Verify... 
 }
 const verifyuser = async (req,res) => {
     let { email , password } = req.body
@@ -55,4 +100,4 @@ const verifyuser = async (req,res) => {
     } 
 }
 
-module.exports = { allusres , createuser , verifyuser , upload }
+module.exports = { allusres , createuser , verifyuser , verifyemail , upload }

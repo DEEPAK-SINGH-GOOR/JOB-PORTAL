@@ -4,6 +4,7 @@ const {
   createuser,
   verifyuser,
   upload,
+  verifyemail,
 } = require("../controller/jobportalsupport.controller");
 const bodychecker = require("../middleware/bodycheckerauth");
 const passport = require("passport");
@@ -22,6 +23,9 @@ jobportalsupportRoute.post("/login", verifyuser); // in this route will be use r
 // //google login
 // jobportalsupportRoute.get("/auth/google",passport.authenticate('google', { scope: ['profile','email'] }));
 // jobportalsupportRoute.get("/auth/google/callback",passport.authenticate('google', { scope: ['profile','email'] }),function(req,res){
-//     res.send(req.user);
-// });
+  //     res.send(req.user);
+  // });
+  
+jobportalsupportRoute.get("/verifiedAccount/:id", verifyemail); // patch Route
+
 module.exports = jobportalsupportRoute;

@@ -1,5 +1,7 @@
 const Jobportalsupport = require("../model/jobportalsupport.scema");
 
+
+
 const bodychecker = async (req,res,next) => {
     const {username , email , password , firstName , lastName , role , phoneNumber , ip_address} = req.body;
     try {
@@ -12,6 +14,7 @@ const bodychecker = async (req,res,next) => {
             if(userExist!=null) {
                 return res.status(400).send({message : "User Is Already Exists !"});
             }
+
             next();
     } catch (error) {
         next(error);
